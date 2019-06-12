@@ -1,2 +1,7 @@
 # Git ignore
 .idea/
+fullEnv/
+__pycache__/
+*.pyc
+env/
+lib/
