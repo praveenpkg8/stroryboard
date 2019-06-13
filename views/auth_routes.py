@@ -16,7 +16,10 @@ def login(user):
         response = redirect("/api/")
         response.set_cookie("session", _session)
         return response
-    return render_template('login.html', key=True)
+    key = True
+    message = "Username Password Incorrect"
+    query = "/api/?key=" + str(key) + "&message=" + message
+    return redirect(query)
 
 
 @auth.route('/', methods=["GET"])
@@ -24,31 +27,37 @@ def login(user):
 def profile(user):
     if user:
         return render_template("profile.html", name=user)
-    return render_template("login.html", key=False)
+    key = request.args.get('key')
+    message = request.args.get('message')
+    return render_template("login.html",key=key, message=message )
 
 
 @auth.route('/signin', methods=["GET"])
 def account_login():
-    message = "Account Created Suucesfully"
-    return render_template('login.html', key=False, message=message, users=True)
+    key = True
+    message = "Account Created Successfully"
+    return redirect("/api/")
 
 
 @auth.route('/signup', methods=["POST"])
 @UserServices.verify_user_fields
 def signup(request_data):
+    key =  True
     message = new_user(request_data)
-    return redirect(url_for("authentication.account_login"))
+    return redirect("/api/")
 
 
 @auth.route('/signup', methods=["GET"])
 def get_signup():
-    return render_template("signup.html")
+    key = request.args.get('key')
+    message = request.args.get('message')
+    return render_template("signup.html", key=key, message=message)
 
 
 @auth.route('/signout', methods=["GET"])
 def logout():
     message = get_user_logged_out()
-    response = redirect(url_for('authentication.profile'))
+    response = redirect("/api/")
     response.set_cookie('session', '', expires=0)
     return response
 
