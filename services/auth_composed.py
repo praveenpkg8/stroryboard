@@ -1,9 +1,9 @@
 import uuid
 
-from flask import session, request, Response
+from flask import session, request
 
 from models.auth_datastore import User, Session
-from utils.helpers import entity_list, from_datastore, parse_session
+from utils.helpers import entity_list
 
 
 def new_user(request_data):
