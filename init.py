@@ -28,7 +28,9 @@ def init_app(name):
     with app.app_context():
         model = get_model()
         model.init_app(app)
-        from views.auth_routes import auth
+        from views.auth_views import auth
+        from views.stories_api import story
         app.register_blueprint(auth)
+        app.register_blueprint(story)
 
     return app
