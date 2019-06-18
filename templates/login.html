@@ -12,7 +12,7 @@
 <div class="container">
         {% if key %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Incorrect </strong> Username or Password
+                <strong> {{ message }}</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -26,7 +26,7 @@
                 </button>
               </div>
               {% endif %}
-    <form method="POST" action="/api/signin">
+    <form method="POST" action="/profile/signin">
         <div class="form-group">
           <label for="exampleInputEmail1">User Name</label>
           <input type="text" class="form-control" name="user_name" aria-describedby="emailHelp" placeholder="Enter User Name">
@@ -35,7 +35,7 @@
           <label for="exampleInputPassword1">Password</label>
           <input type="password" class="form-control" name="password" placeholder="Password">
         </div>
-        <a href="/api/signup"> NewUser</a>
+        <a href="/profile/signup"> NewUser</a>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
 </div>
