@@ -7,6 +7,8 @@ class User(ndb.Model):
     mail = ndb.StringProperty()
     password = ndb.StringProperty()
     mobile_number = ndb.StringProperty()
+    created_on = ndb.DateTimeProperty(auto_now=True)
+    updated_on = ndb.DateTimeProperty(auto_now_add=True)
 
     @staticmethod
     def create_user(user):
@@ -28,6 +30,8 @@ class Session(ndb.Model):
     session_id = ndb.StringProperty()
     user_name = ndb.StringProperty()
     name = ndb.StringProperty()
+    created_on = ndb.DateTimeProperty(auto_now=True)
+    updated_on = ndb.DateTimeProperty(auto_now_add=True)
 
     @staticmethod
     def create_session(session):
