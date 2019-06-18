@@ -9,15 +9,15 @@
 <body>
         
 <div class="container">
-    {% if key %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>{{ message }} </strong> 
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          {% endif %}
-    <form method="POST" action="/api/signup">
+     {% if key %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong> {{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endif %}
+    <form method="POST" action="/profile/signup">
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputEmail4">Name</label>
