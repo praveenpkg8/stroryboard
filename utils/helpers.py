@@ -1,3 +1,4 @@
+import datetime
 def construct_response_message(**kwargs):
     return kwargs
 
@@ -16,6 +17,22 @@ def parse_entity(entity):
         mobile_number=entity.mobile_number.encode("utf-8")
     )
     return ent
+
+
+def parse_story(story):
+    _story = dict_formation(
+        name=story.name.encode('utf-8'),
+        story=story.story.encode('utf-8'),
+        time=story.created_on.isoformat()
+    )
+    return _story
+
+
+def parse_all_stories(stories):
+    data = []
+    for story in stories:
+        data.append(parse_story(story))
+    return data
 
 
 def parse_session(_session):
