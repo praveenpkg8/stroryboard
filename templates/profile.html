@@ -2,14 +2,47 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="./../static/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+
+    
 </head>
 <body>
+        
+
+
 <div class="container">
-    <h1>Welcome {{ name }}</h1>
+    <h1>Welcome <span id="profile_name">{{ data.name }}</span></h1>
     <p>Have a nice day</p>
-    <a href="/api/signout" class="btn btn-warning">logout</a>
+    <a href="/profile/signout" class="btn btn-warning">logout</a>
+    <br>
+    <br>
+    <br>
+    <form action="">
+            <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Enter Your Story</label>
+                    <textarea class="form-control" id="story_content" placeholder="stories"rows="3"></textarea>
+                    <a onclick="postStory()" class="btn btn-success">Post</a>
+                </div>
+        </form>
+    <div id="story" >
+            <div id="main"></div>
+            </div>
+
+
+        </div>
 </div>
+<script src="{{ url_for('static', filename='js/story.js') }}"></script>
+<script>
+        function getUserDetails() {
+        return {{data|tojson}}
+}
+</script>
+
+
 
 
 </body>
+
+
 </html>
