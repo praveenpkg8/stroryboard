@@ -32,12 +32,3 @@ def upload_comment(user):
     message = construct_response_message(message=str(response))
     return json.dumps(message)
 
-
-@comment.route('/', methods=['GET'])
-@UserServices.check_user
-def fetch_all_comment(user):
-    response = CommentServices.retrieve_all_comment()
-    message = construct_response_message(message=str(response))
-    return json.dumps(message)
-
-

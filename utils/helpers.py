@@ -1,4 +1,7 @@
 import datetime
+
+from models.stories import Comment
+
 def construct_response_message(**kwargs):
     return kwargs
 
@@ -21,6 +24,7 @@ def parse_entity(entity):
 
 def parse_story(story):
     _story = dict_formation(
+        story_id=story.story_id.encode('utf-8'),
         name=story.name.encode('utf-8'),
         story=story.story.encode('utf-8'),
         time=story.created_on.isoformat()
@@ -28,10 +32,14 @@ def parse_story(story):
     return _story
 
 
-def parse_all_stories(stories):
+def parse_all_story(stories):
     data = []
     for story in stories:
-        data.append(parse_story(story))
+        story_id = str(story.story_id.encode('utf-8'))
+        comments = parse_all_comment(Comment.get_all_comment(story_id))
+        _story = parse_story(story)
+        _story['comments'] = comments
+        data.append(_story)
     return data
 
 
@@ -42,6 +50,24 @@ def parse_session(_session):
         user_name=_session.user_name.encode('utf-8')
     )
     return ses
+
+
+def parse_comment(comment):
+    _comment = dict_formation(
+        comment_id=comment.comment_id.encode("utf-8"),
+        story_id=comment.story_id.encode("utf-8"),
+        name=comment.name.encode("utf-8"),
+        user_name=comment.user_name.encode("utf-8"),
+        comment=comment.comment.encode("utf-8")
+    )
+    return _comment
+
+
+def parse_all_comment(comments):
+    data = []
+    for comment in comments:
+        data.append(parse_comment(comment))
+    return data
 
 
 builtin_list = list
