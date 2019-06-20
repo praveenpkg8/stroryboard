@@ -36,9 +36,15 @@ def parse_all_story(stories):
     data = []
     for story in stories:
         story_id = str(story.story_id.encode('utf-8'))
-        comments = parse_all_comment(Comment.get_all_comment(story_id))
+        comments, next_cursor, more = Comment.get_all_comment(story_id)
+        comment = dict_formation(
+            comment=parse_all_comment(comments),
+            next_cursor=next_cursor,
+            more=more,
+        )
+
         _story = parse_story(story)
-        _story['comments'] = comments
+        _story['comments'] = comment
         data.append(_story)
     return data
 

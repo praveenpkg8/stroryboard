@@ -1,4 +1,6 @@
+import logging
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 
 
 class Story(ndb.Model):
@@ -15,9 +17,25 @@ class Story(ndb.Model):
         return story_key
 
     @staticmethod
-    def get_all_story():
+    def get_all_story(cursor=None):
+        _cursor = Cursor(urlsafe=cursor)
         stories = Story.query().order(-Story.created_on)
-        return stories.fetch()
+        story, next_cursor, more = stories.fetch_page(2, start_cursor=_cursor)
+        next_cursor = next_cursor.urlsafe()
+        return story, next_cursor, more
+
+    @staticmethod
+    def get_one_page_of_task(cursor=None):
+        query = Story.query()
+        objects, next_cursor, more = query.fetch_page(2, start_cursor=cursor)
+        fire, next_cursor, more = query.fetch_page(2, start_cursor=next_cursor)
+        # logging.info(query_iter)
+        # page = next(query_iter.pages)
+        #
+        # tasks = list(page)
+        # next_cursor = query_iter.next_page_token
+
+        return fire, next_cursor, more
 
 
 class Comment(ndb.Model):
@@ -36,6 +54,12 @@ class Comment(ndb.Model):
         return comment_key
 
     @staticmethod
-    def get_all_comment(story_id):
+    def get_all_comment(story_id, cursor=None):
+        _cursor = Cursor(urlsafe=cursor)
         comments = Comment.query(Comment.story_id == story_id).order(-Comment.created_on)
-        return comments.fetch()
+        comment, next_cursor, more = comments.fetch_page(2, start_cursor=_cursor)
+        if next_cursor is not None:
+            next_cursor = next_cursor.urlsafe()
+        return comment, next_cursor, more
+
+
