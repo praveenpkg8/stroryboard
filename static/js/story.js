@@ -14,38 +14,40 @@ function getStory()
     xmlHttp.open( "GET",  "http://localhost:8080/api/story", false ); // false for synchronous request
     xmlHttp.send();
     response = JSON.parse(xmlHttp.responseText);
+    displayStory()
 }
 function getNextStory()
 {
+    if (response.more){
     var xmlHttp = new XMLHttpRequest();
     url = "http://localhost:8080/api/story?next_cursor=" + response.next_cursor 
     xmlHttp.open( "GET", url , false ); // false for synchronous request
     xmlHttp.send();
     response = JSON.parse(xmlHttp.responseText);
     displayStory();
+    }
 }
 function getNextComment(next_cursor, story_id)
 {
+    var res
     var xmlHttp = new XMLHttpRequest();
-    story_id = story_id.substring(0, story_id.length - 1)
-    console.log(story_id)
+    story_id = story_id.substring(0, story_id.length - 12)
     url = "http://localhost:8080/api/comment?next_cursor=" + next_cursor + "&story_id=" + story_id;
     xmlHttp.open( "GET", url , false ); // false for synchronous request
     xmlHttp.send();
-    response = JSON.parse(xmlHttp.responseText);
-    console.log(response)
-    displayNextComment(story_id, response)
+    res = JSON.parse(xmlHttp.responseText);
+    displayNextComment(story_id, res)
 
 }
 
-function parseDay(date, _date) {
-    if (date == 0) {
-        return "Today " + _date;
+function parseDay(today, _date) {
+    if (_date.getDate() == today.getDate()) {
+        return "Today " + _date.toLocaleTimeString();
     }
-    else if (date == 1){
-        return "Yesterday " + _date;
+    else if (_date.getDate() == today.getDate() - 1){
+        return "Yesterday " + _date.toLocaleTimeString();
     }
-    return _date;
+    return _date.toLocaleString();;
 }
 
 function displayComment(comments, story_id, user_name) {
@@ -55,7 +57,7 @@ function displayComment(comments, story_id, user_name) {
     });
     if (comments.more){
         template += `<div id="` + comments.next_cursor + `">
-                        <button onclick="getNextComment(this.parentNode.id, this.id)" id=` + story_id  + `y` + `>load more comment......</button>
+                        <a href="#" onclick="getNextComment(this.parentNode.id, this.id); return false;" id=` + story_id  + `more_comment` + `>load more comment......</a>
                         </div>`;
     }
     return template;
@@ -63,38 +65,30 @@ function displayComment(comments, story_id, user_name) {
 function displayNextComment(story_id, response) {
     var el = document.getElementById(story_id + 'x')
     var temp = ""
-    console.log(response)
     response.message.forEach(function (comment) {
         temp += `<li class="list-group-item" > <span class="badge badge-secondary">` + comment.name +`</span>    ` + comment.comment +`</li>`;
         
     });
     if (response.more){
-        document.getElementById(story_id + "y" ).remove();
+        document.getElementById(story_id + "more_comment" ).remove();
         temp += ` <div id="` + response.next_cursor + `">
-        <button onclick="getNextComment(this.parentNode.id, this.id)" id=` + story_id  + `y` + `>load more comment......</button>
+        <a href="#" onclick="getNextComment(this.parentNode.id, this.id); return false;" id=` + story_id  + `more_comment` + `>load more comment......</a>
         </div>`;
         
     }
     else{
-        document.getElementById(story_id + "y" ).remove();
+        document.getElementById(story_id + "more_comment" ).remove();
 
     }
     el.innerHTML += temp
-    console.log(temp)
-    
 }
 
 function displayStory() {
     var stories = response.message;
     stories.forEach(function (story) {
-        var oneDay = 24*60*60*1000;
         var date = new Date(story.time);
-        date = new Date(date.getTime() + (330 + date.getTimezoneOffset() * 60000 ));
         var today =new Date();
-        today =new Date(today.getTime() + (330 + today.getTimezoneOffset() * 60000 ));
-        var diffDays = Math.round(Math.abs((today.getTime() - date.getTime())/(oneDay)));
-        var day = parseDay(diffDays, date);
-        
+        var day = parseDay(today, date);
         template += `<div class="card w-75" >
                         <div class="card-body">
                             <h5 class="card-title">`+ story.name +`</h5>
@@ -126,14 +120,17 @@ function displayStory() {
 
 
 function postStory() {
+    template = "";
     var xmlHttp = new XMLHttpRequest();
     data = getUserDetails();
     xmlHttp.open( "POST",  "http://localhost:8080/api/story", false ); // false for synchronous request
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     var data = JSON.stringify({"name": data.name, "story": document.getElementById("story_content").value, "user_name": data.user_name});
     xmlHttp.send(data);
+    document.getElementById("main").innerHTML = "";
     getStory();
     document.getElementById("story_content").value = "";
+    
 }
 
 function postComment(story_id) {
@@ -146,8 +143,20 @@ function postComment(story_id) {
     xmlHttp.send(data);
 
     document.getElementById("comment_content" + story_id).value = "";
-    displayStory();
+    // displayStory();
+    // getStory();
 }
 
 getStory();
-displayStory();
+
+
+var whenScrlBottom = function() {
+
+    var win_h = (self.innerHeight) ? self.innerHeight : document.body.clientHeight;    
+    var scrl_pos = window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+    if (document.body.scrollHeight <= (scrl_pos + win_h)) {
+        setTimeout(getNextStory,1000)
+    }
+  }
+  
+  window.onscroll = whenScrlBottom;
