@@ -1,6 +1,14 @@
 import datetime
 
+
 from models.stories import Comment
+
+epoch = datetime.datetime.utcfromtimestamp(0)
+
+def unix_time_millis(dt):
+    return (dt - epoch).total_seconds() * 1000.0
+
+
 
 def construct_response_message(**kwargs):
     return kwargs
@@ -27,7 +35,7 @@ def parse_story(story):
         story_id=story.story_id.encode('utf-8'),
         name=story.name.encode('utf-8'),
         story=story.story.encode('utf-8'),
-        time=story.created_on.isoformat()
+        time=unix_time_millis(story.created_on)
     )
     return _story
 
