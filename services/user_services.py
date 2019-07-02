@@ -93,8 +93,9 @@ class UserServices:
             if 'session' in request.cookies:
                 message = request.cookies.get('session')
                 user = Session.get_session(message)
-                user_details = parse_session(user)
-                return fn(user_details)
+                if user is not None:
+                    user_details = parse_session(user)
+                    return fn(user_details)
             return fn(False)
 
         return decorated_function
