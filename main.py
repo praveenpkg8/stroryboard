@@ -1,8 +1,9 @@
 from init import init_app
 import logging
 from flask import redirect, url_for
+from flask_cors import CORS
 app = init_app(__name__)
-
+CORS(app)
 
 @app.route('/')
 def hello():
