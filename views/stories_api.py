@@ -1,12 +1,14 @@
 import json
 from flask import Blueprint, request
 
-from services.stories_services import StoryServices, CommentServices
+from services.stories_services import StoryServices, CommentServices, LikeService, FileServices
 from services.user_services import UserServices
 from utils.helpers import construct_response_message
+from models.stories import Story
 
 story = Blueprint('profile', __name__, url_prefix='/api/story')
 comment = Blueprint('story', __name__, url_prefix='/api/comment')
+like = Blueprint('like', __name__, url_prefix='/api/like')
 
 
 @story.route('/', methods=['POST'])
@@ -20,20 +22,12 @@ def upload_stories(user):
 @story.route('/', methods=['GET'])
 @UserServices.check_user
 def fetch_all_stories(user):
-    response, next_cursor, more = StoryServices.retrieve_all_story()
+    response, next_cursor, more = StoryServices.retrieve_all_story(user)
     message = construct_response_message(
         message=response,
         next_cursor=next_cursor,
         more=more
     )
-    return json.dumps(message)
-
-
-@story.route('/page', methods=['GET'])
-@UserServices.check_user
-def fetch_all_page(user):
-    response = StoryServices.pagination_check()
-    message = construct_response_message(message=str(response))
     return json.dumps(message)
 
 
@@ -57,3 +51,13 @@ def get_comment(user):
     )
     return json.dumps(message)
 
+
+@like.route('/', methods=['GET'])
+@UserServices.check_user
+def update_like(user):
+    status, count = LikeService.update_like()
+    message = construct_response_message(
+        status=status,
+        count=count
+    )
+    return json.dumps(message)
