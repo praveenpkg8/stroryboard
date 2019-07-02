@@ -1,13 +1,12 @@
 import datetime
 
-
-from models.stories import Comment
+from models.stories import Comment, Like
 
 epoch = datetime.datetime.utcfromtimestamp(0)
 
-def unix_time_millis(dt):
-    return (dt - epoch).total_seconds() * 1000.0
 
+def unix_time_millis(date):
+    return (date - epoch).total_seconds() * 1000.0
 
 
 def construct_response_message(**kwargs):
@@ -35,15 +34,16 @@ def parse_story(story):
         story_id=story.story_id.encode('utf-8'),
         name=story.name.encode('utf-8'),
         story=story.story.encode('utf-8'),
+        like_count=story.like_count,
         time=unix_time_millis(story.created_on)
     )
     return _story
 
 
-def parse_all_story(stories):
+def parse_all_story(stories, user):
     data = []
     for story in stories:
-        story_id = str(story.story_id.encode('utf-8'))
+        story_id = story.story_id.encode('utf-8')
         comments, next_cursor, more = Comment.get_all_comment(story_id)
         comment = dict_formation(
             comment=parse_all_comment(comments),
@@ -53,6 +53,9 @@ def parse_all_story(stories):
 
         _story = parse_story(story)
         _story['comments'] = comment
+        like_key = Like.get_like(user.get('user_name'), story_id)
+        liked = True if like_key is not None else False
+        _story['liked'] = liked
         data.append(_story)
     return data
 
