@@ -4,10 +4,22 @@
 <link rel="stylesheet" type="text/css" href="./../static/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
 </head>
 <body >
+        <style>
+                .img_wrp {
+    display: inline-block;
+    position: relative;
+  
+  }
+  .Close {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+        </style>
         
 
 
@@ -20,10 +32,27 @@
     <br>
     <form action="">
             <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Enter Your Story</label>
-                    <textarea class="form-control" id="story_content" placeholder="stories"rows="3"></textarea>
-                    <a onclick="postStory()" class="btn btn-success">Post</a>
+                        <div class="img_wrp" id="preview_image" style="visibility: hidden">
+                                        <img id="img" src="" class="imgResponsiveMax" style="height: 200px; width: 200px" alt="" />
+                                        <button type="button" class="close Close" aria-label="Close" onclick="onClickMe()" >
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                <textarea class="form-control w-75" id="story_content" placeholder="stories"rows="3"></textarea>
+                                <div style="height:0px;overflow:hidden">
+                                        <input type="file" id="fileInput" onchange="previewImage()" name="fileInput" />
+                                </div>
+                                <button type="button" onclick="chooseFile();" class="btn btn-warning"> <i class="fa fa-file-photo-o"></i></button>
+
+
+
+                                             
+                                <a onclick="postStory()" class="btn btn-success"><i class="fa fa-send-o"></i></a>
+                               
+
+                    
                 </div>
+                
         </form>
     <div id="story"  >
             <div id="main"></div>
@@ -38,6 +67,8 @@
         function getUserDetails() {
         return {{data|tojson}}
 }
+
+   
 </script>
 
 
