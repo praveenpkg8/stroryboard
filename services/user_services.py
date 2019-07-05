@@ -1,3 +1,7 @@
+import json
+import logging
+
+
 from functools import wraps
 from flask import request, redirect
 
@@ -8,7 +12,7 @@ from services.parser import Parser
 from utils.exception import UserNameAlreadyTakenException, UserNameLengthException, \
     EmailFormatException, AccountAlreadyExist, MobileNumberFormatException, \
     MobileNumberLengthException
-from utils.helpers import from_datastore, parse_entity, parse_session
+from utils.helpers import from_datastore, parse_entity, parse_session, construct_response_message
 
 
 class UserServices:
@@ -20,7 +24,7 @@ class UserServices:
     def verify_user_fields(fn):
         @wraps(fn)
         def decorated_function(*args, **kwargs):
-            request_data = request.form
+            request_data = request.get_json()
             required_fields = ['name', 'user_name', 'mail', 'password', 'mobile_number']
             username, mail = fetch_all_user(True)
             for key in required_fields:
@@ -31,43 +35,31 @@ class UserServices:
                     try:
                         Parser.parse_unique_user_name(request_data['user_name'], username)
                     except UserNameAlreadyTakenException as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
                     except UserNameLengthException as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
 
                 if key == 'mail':
                     try:
                         Parser.parse_email(request_data['mail'], mail)
                     except EmailFormatException as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
                     except AccountAlreadyExist as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
 
                 if key == 'mobile_number':
                     try:
                         Parser.parse_mobile_number(request_data['mobile_number'])
                     except MobileNumberFormatException as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
                     except MobileNumberLengthException as e:
-                        message = e.error_message
-                        keys = True
-                        query = "/profile/signup?key=" + str(keys) + "&message=" + message
-                        return redirect(query)
+                        message = construct_response_message(e.error_message)
+                        return json.dumps(message)
 
             return fn(request_data)
 
@@ -77,7 +69,7 @@ class UserServices:
     def verify_user(fn):
         @wraps(fn)
         def decorated_function(*args, **kwargs):
-            request_data = request.form
+            request_data = request.get_json()
             user = parse_entity(from_datastore(User.user_by_username(request_data.get('user_name'))))
             if user is None:
                 return fn(False)
@@ -91,8 +83,10 @@ class UserServices:
         @wraps(fn)
         def decorated_function(*args, **kwargs):
             if 'session' in request.cookies:
+
                 message = request.cookies.get('session')
                 user = Session.get_session(message)
+                logging.info(user)
                 if user is not None:
                     user_details = parse_session(user)
                     return fn(user_details)
