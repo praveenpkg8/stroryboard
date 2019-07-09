@@ -1,3 +1,5 @@
+from flask_cors import CORS
+
 import config
 import logging
 
@@ -18,6 +20,8 @@ def get_model():
 
 def init_app(name):
     app = Flask(name)
+    CORS(app, supports_credentials=True)
+
     app.config.from_object(config)
     app.secret_key = '\n\x92\x03\xf4s\xc9\xb8\xfe\x1a\x8a\xe9G\'\xf0Q\x0f\x89\n7\x81\xc0Vz_\xf6\x99:\xc4SR\x9en\xa3(' \
                      '\x0fi\x83\x81aab\xc4\x885\xb5^z\xf1\xee&\xde\x009J\xbfH\xe3\xdf\xe0"\xf5\x8d\xe8@\x10\x8f\xe0' \
