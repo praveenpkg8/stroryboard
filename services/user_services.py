@@ -55,6 +55,8 @@ class UserServices:
                     try:
                         Parser.parse_mobile_number(request_data['mobile_number'])
                     except MobileNumberFormatException as e:
+
+
                         message = construct_response_message(e.error_message)
                         return json.dumps(message)
                     except MobileNumberLengthException as e:
@@ -82,11 +84,10 @@ class UserServices:
     def check_user(fn):
         @wraps(fn)
         def decorated_function(*args, **kwargs):
+            logging.info(request.cookies)
             if 'session' in request.cookies:
-
                 message = request.cookies.get('session')
                 user = Session.get_session(message)
-                logging.info(user)
                 if user is not None:
                     user_details = parse_session(user)
                     return fn(user_details)
