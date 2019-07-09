@@ -2,9 +2,9 @@ import time
 import json
 import logging
 
-from flask import Blueprint, render_template, redirect, request
+from flask import Blueprint, redirect,Flask
 
-from services.auth_services import new_user, authenticate_user, get_user_logged_out, get_name
+from services.auth_services import authenticate_user
 from services.user_services import UserServices
 from utils.helpers import construct_response_message
 from status import Status
@@ -18,9 +18,10 @@ def login(user):
     if user:
         _session = authenticate_user(user)
         time.sleep(0.5)
-        message = construct_response_message(message="successful login",
-                                             session=_session)
-        return json.dumps(message), Status.HTTP_200_OK
+        message = json.dumps(construct_response_message(message="successful login",
+                                             session=_session))
+
+        return message, Status.HTTP_200_OK
     message = construct_response_message(message="Username Password Incorrect")
     return json.dumps(message), Status.HTTP_400_BAD_REQUEST
 
@@ -45,7 +46,9 @@ def signup(request_data):
 
 @auth.route('/signout', methods=["GET"])
 def logout():
-    response = redirect("/profile/")
-    response.set_cookie('session', '', expires=0)
-    message = construct_response_message(message="Logged Out Successfully")
-    return json.dumps(message)
+    data = {"some_key": "some_value"}  # Your data in JSON-serializable type
+    response = Flask.response_class(response=json.dumps(data),
+                                  status=200,
+                                  mimetype='application/json')
+    response.headers["Access-Control-Allow-Credentials"] = True
+    return response
