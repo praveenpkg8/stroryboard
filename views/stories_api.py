@@ -14,7 +14,7 @@ like = Blueprint('like', __name__, url_prefix='/api/like')
 @UserServices.check_user
 def upload_stories(user):
     response = StoryServices.save_story()
-    message = construct_response_message(message=response)
+    message = construct_response_message(message=str(response))
     return json.dumps(message)
 
 
