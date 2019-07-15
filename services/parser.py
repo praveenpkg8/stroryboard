@@ -10,12 +10,12 @@ MOBILE_REGEX = '^[6-9]\d{9}$'
 class Parser(object):
 
     @staticmethod
-    def parse_email(mail, mail_list):
+    def parse_email(mail, mail_taken):
         is_valid = re.search(pattern=EMAIL_REGEX, string=mail)
+        if mail_taken:
+            raise AccountAlreadyExist("Account Already exist")
         if not is_valid:
             raise EmailFormatException("Invalid Email id Format")
-        if mail in mail_list:
-            raise AccountAlreadyExist("Account Already exist")
         return True
 
     @staticmethod
