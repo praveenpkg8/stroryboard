@@ -3,10 +3,8 @@ from google.appengine.ext import ndb
 
 class User(ndb.Model):
     name = ndb.StringProperty()
-    user_name = ndb.StringProperty()
     mail = ndb.StringProperty()
     password = ndb.StringProperty()
-    mobile_number = ndb.StringProperty()
     created_on = ndb.DateTimeProperty(auto_now=True)
     updated_on = ndb.DateTimeProperty(auto_now_add=True)
 
@@ -20,15 +18,16 @@ class User(ndb.Model):
         users = User.query()
         return users.fetch()
 
+
     @staticmethod
-    def user_by_username(username):
-        user = User.query(User.user_name == username).fetch()
+    def user_by_mail(mail):
+        user = User.query(User.mail == mail).get()
         return user
 
 
 class Session(ndb.Model):
     session_id = ndb.StringProperty()
-    user_name = ndb.StringProperty()
+    mail = ndb.StringProperty()
     name = ndb.StringProperty()
     created_on = ndb.DateTimeProperty(auto_now=True)
     updated_on = ndb.DateTimeProperty(auto_now_add=True)
