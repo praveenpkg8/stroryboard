@@ -7,7 +7,7 @@ import datetime
 class Story(ndb.Model):
     story_id = ndb.StringProperty()
     name = ndb.StringProperty()
-    user_name = ndb.StringProperty()
+    mail = ndb.StringProperty()
     story = ndb.StringProperty()
     like_count = ndb.IntegerProperty(default=0)
     created_on = ndb.DateTimeProperty(auto_now=True)
@@ -52,7 +52,7 @@ class Story(ndb.Model):
 class Comment(ndb.Model):
     comment_id = ndb.StringProperty()
     story_id = ndb.StringProperty()
-    user_name = ndb.StringProperty()
+    mail = ndb.StringProperty()
     name = ndb.StringProperty()
     comment = ndb.StringProperty()
     created_on = ndb.DateTimeProperty(auto_now=True)
@@ -76,17 +76,17 @@ class Comment(ndb.Model):
 class Like(ndb.Model):
     like_id = ndb.StringProperty()
     story_id = ndb.StringProperty()
-    user_name = ndb.StringProperty()
+    mail = ndb.StringProperty()
     is_active = ndb.BooleanProperty(default=True)
 
     @staticmethod
     def create_like(like):
         like_key = like.put()
-        return
+        return like_key
 
     @staticmethod
-    def get_like(user_name, story_id):
-        like = Like.query(Like.user_name == user_name and Like.story_id == story_id).get()
+    def get_like(mail, story_id):
+        like = Like.query(Like.mail == mail and Like.story_id == story_id).get()
         return like
 
     @staticmethod
