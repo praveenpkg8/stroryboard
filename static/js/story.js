@@ -72,7 +72,7 @@ function parseDay(today, _date) {
     else if (_date.getDate() == today.getDate() - 1){
         return "Yesterday " + _date.toLocaleTimeString();
     }
-    return _date.toLocaleString();;
+    return _date.toLocaleString();
 }
 
 function displayComment(comments, story_id, user_name) {
