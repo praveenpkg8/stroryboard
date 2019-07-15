@@ -11,15 +11,15 @@ class StoryServices(object):
     def save_story():
         story_id = uuid.uuid4().hex
         request_data = request.get_json()
-        put_url = Story.file_sign(story_id)
+        # put_url = Story.file_sign(story_id)
         story = Story(
             story_id=story_id,
             name=request_data.get('name'),
-            user_name=request_data.get('user_name'),
+            mail=request_data.get('mail'),
             story=request_data.get('story')
         )
         message = Story.create_story(story)
-        return put_url
+        return message
 
     @staticmethod
     def retrieve_all_story(user):
@@ -50,7 +50,7 @@ class CommentServices(object):
             comment_id=comment_id,
             story_id=request_data.get('story_id'),
             name=request_data.get('name'),
-            user_name=request_data.get('user_name'),
+            mail=request_data.get('mail'),
             comment=request_data.get('comment')
         )
         message = Comment.create_comment(comment)
@@ -69,8 +69,8 @@ class LikeService(object):
     @staticmethod
     def update_like():
         story_id = request.args.get('story_id')
-        user_name = request.args.get('user_name')
-        like_key = Like.get_like(user_name, story_id)
+        mail = request.args.get('mail')
+        like_key = Like.get_like(mail, story_id)
         if like_key is not None:
             Like.delete_like(like_key)
             count = StoryServices.update_like(story_id, False)
@@ -80,7 +80,7 @@ class LikeService(object):
             like = Like(
                 like_id=like_id,
                 story_id=story_id,
-                user_name=user_name
+                mail=mail
             )
             count = StoryServices.update_like(story_id, True)
             like_key = Like.create_like(like)
