@@ -4,7 +4,6 @@ from flask import Blueprint, request
 from services.stories_services import StoryServices, CommentServices, LikeService, FileServices
 from services.user_services import UserServices
 from utils.helpers import construct_response_message
-from models.stories import Story
 
 story = Blueprint('profile', __name__, url_prefix='/api/story')
 comment = Blueprint('story', __name__, url_prefix='/api/comment')
