@@ -6,21 +6,54 @@ from models.auth_datastore import User, Session
 from utils.helpers import entity_list
 
 
-def new_user(request_data):
-    user = User(
-        name=request_data.get('name'),
-        user_name=request_data.get('user_name'),
-        mail=request_data.get('mail'),
-        password=request_data.get('password'),
-        mobile_number=request_data.get('mobile_number')
-    )
-    res = User.create_user(user)
-    return "Account Created Successfully"
+class AuthServices(object):
+
+    @staticmethod
+    def new_user(request_data):
+        user = User(
+            name=request_data.get('name'),
+            mail=request_data.get('mail'),
+            password=request_data.get('password'),
+        )
+        res = User.create_user(user)
+        return "Account Created Successfully"
+
+    @staticmethod
+    def fetch_user_by_mail(mail):
+        user = User.user_by_mail(mail)
+        return user
+
+    @staticmethod
+    def google_oauth_new_user(user_info):
+        password = uuid.uuid4().hex
+        logging.info(type(user_info))
+        user = User(
+            name=user_info.get('name'),
+            mail=user_info.get('email'),
+            password=password
+        )
+        res = User.create_user(user)
+        return "Account Created Successfully"
+
+    @staticmethod
+    def google_oauth_authenticate_user(user):
+        if user:
+            session_id = str(uuid.uuid4())
+            ses = Session(
+                session_id=session_id,
+                mail=user.get('email'),
+                name=user.get('name')
+            )
+            res = Session.create_session(ses)
+            logging.info(res)
+            return session_id
+        return user
 
 
-def fetch_all_user(verify=False):
+
+def fetch_all_user():
     users = User.get_all_user()
-    return entity_list(users, verify)
+    return entity_list(users)
 
 
 def authenticate_user(user):
@@ -28,7 +61,7 @@ def authenticate_user(user):
         session_id = str(uuid.uuid4())
         ses = Session(
             session_id=session_id,
-            user_name=user.get('user_name'),
+            mail=user.get('mail'),
             name=user.get('name')
         )
         res = Session.create_session(ses)
