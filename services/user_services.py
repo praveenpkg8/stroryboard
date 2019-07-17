@@ -59,7 +59,6 @@ class UserServices:
     def check_user(fn):
         @wraps(fn)
         def decorated_function(*args, **kwargs):
-            logging.info(request.cookies)
             if 'session' in request.cookies:
                 message = request.cookies.get('session')
                 user = Session.get_session(message)
