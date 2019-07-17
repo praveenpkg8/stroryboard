@@ -72,12 +72,8 @@ def callback():
     message = json.dumps(construct_response_message(message="successful login",
                                                     session=session_id))
 
-    url = 'http://localhost:3000/session/' + session_id
+    url = 'http://localhost:3000/sign/' + session_id
 
     return redirect(url)
 
-    # return redirect('http://localhost:3000/profile')
 
-@auth.route('/oauthtokens')
-def tokens():
-    return 'success'
