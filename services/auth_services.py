@@ -26,14 +26,17 @@ class AuthServices(object):
     @staticmethod
     def google_oauth_new_user(user_info):
         password = uuid.uuid4().hex
-        logging.info(type(user_info))
-        user = User(
-            name=user_info.get('name'),
-            mail=user_info.get('email'),
-            password=password
-        )
-        res = User.create_user(user)
-        return "Account Created Successfully"
+        user = User.user_by_mail(user_info.get('mail'))
+        if user is None:
+            user = User(
+                name=user_info.get('name'),
+                mail=user_info.get('email'),
+                password=password
+            )
+            res = User.create_user(user)
+            return "Account Created Successfully"
+        else:
+            logging.info(user)
 
     @staticmethod
     def google_oauth_authenticate_user(user):
@@ -45,7 +48,6 @@ class AuthServices(object):
                 name=user.get('name')
             )
             res = Session.create_session(ses)
-            logging.info(res)
             return session_id
         return user
 
