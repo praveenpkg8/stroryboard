@@ -21,7 +21,7 @@ class GoogleAuthServices(object):
             access_type='offline',
             include_granted_scopes='true',
             response_type='code',
-            prompt='consent',
+            prompt='select_account',
         )
 
         return '{}?{}'.format('https://accounts.google.com/o/oauth2/v2/auth', urlencode(params))
