@@ -30,8 +30,6 @@ def parse_entity(entity):
 
 def parse_story(story):
     if story is not None:
-        logging.info(story)
-        logging.info(story.story.encode('utf-8'))
         _story = dict_formation(
             story_id=story.story_id.encode('utf-8'),
             name=story.name.encode('utf-8'),
@@ -56,7 +54,6 @@ def parse_all_story(stories, user):
 
         _story = parse_story(story)
         _story['comments'] = comment
-        logging.info(user)
         like_key = Like.get_like(user.get('mail'), story_id)
         liked = True if like_key is not None else False
         _story['liked'] = liked
