@@ -1,5 +1,4 @@
 import datetime
-import logging
 
 from models.stories import Comment, Like
 
@@ -19,6 +18,8 @@ def dict_formation(**kwargs):
 
 
 def parse_entity(entity):
+    if entity is None:
+        return entity
     ent = dict_formation(
         id=entity.key.pairs()[0][1],
         name=entity.name.encode("utf-8"),
@@ -36,6 +37,21 @@ def parse_story(story):
             story=story.story.encode('utf-8'),
             like_count=story.like_count,
             time=unix_time_millis(story.created_on)
+        )
+        return _story
+    return story
+
+
+def parse_update_story(story):
+    if story is not None:
+        _story = dict_formation(
+            story_id=story.story_id.encode('utf-8'),
+            name=story.name.encode('utf-8'),
+            story=story.story.encode('utf-8'),
+            like_count=story.like_count,
+            time=unix_time_millis(story.created_on),
+            liked=False,
+            comments={"comment": [], 'next_cursor': None, 'more': False}
         )
         return _story
     return story
