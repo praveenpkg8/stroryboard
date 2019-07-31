@@ -1,25 +1,24 @@
 import time
 import json
 import logging
-from urllib import urlencode
 
-import requests
-from flask import Blueprint, Flask, redirect
+from flask import Blueprint, redirect
 
-from services.auth_services import authenticate_user, AuthServices
+from services.auth_services import AuthServices
 from services.user_services import UserServices
 from services.google_auth_services import GoogleAuthServices, GoogleUserServices
 from utils.helpers import construct_response_message
 from status import Status
+from config import frontend_config
 
-auth = Blueprint('authentication', __name__, url_prefix="/profile")
+auth = Blueprint('authentication', __name__, url_prefix="/api/auth")
 
 
 @auth.route('/signin', methods=["POST"])
 @UserServices.verify_user
 def login(user):
     if user:
-        _session = authenticate_user(user)
+        _session = AuthServices.authenticate_user(user)
         time.sleep(0.5)
         message = json.dumps(construct_response_message(message="successful login",
                                                         session=_session))
@@ -50,12 +49,9 @@ def signup(request_data):
 
 @auth.route('/signout', methods=["GET"])
 def logout():
-    data = {"some_key": "some_value"}  # Your data in JSON-serializable type
-    response = Flask.response_class(response=json.dumps(data),
-                                    status=200,
-                                    mimetype='application/json')
-    response.headers["Access-Control-Allow-Credentials"] = True
-    return response
+    message = AuthServices.get_user_logged_out()
+    message = construct_response_message(message=message)
+    return json.dumps(message)
 
 
 @auth.route('/google', methods=["GET"])
@@ -66,14 +62,12 @@ def google_auth():
 
 @auth.route('/oauth2callback')
 def callback():
-    user_info = GoogleUserServices.user_details()
-    session_id = AuthServices.google_oauth_authenticate_user(user_info)
+    user_info, token_id = GoogleUserServices.user_details()
+    session_id = AuthServices.google_oauth_authenticate_user(user_info, token_id)
     time.sleep(0.5)
     message = json.dumps(construct_response_message(message="successful login",
                                                     session=session_id))
-
-    url = 'http://localhost:3000/sign/' + session_id
-
+    url = frontend_config().get('frontend_url') + '/sign/' + session_id +''
     return redirect(url)
 
 
