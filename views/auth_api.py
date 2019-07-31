@@ -1,6 +1,5 @@
 import time
 import json
-import logging
 
 from flask import Blueprint, redirect
 
@@ -31,7 +30,6 @@ def login(user):
 @auth.route('/', methods=["GET"])
 @UserServices.check_user
 def profile(user):
-    logging.info(user)
     if user:
         message = construct_response_message(message=user)
         return json.dumps(message), Status.HTTP_200_OK
