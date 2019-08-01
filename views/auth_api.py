@@ -1,5 +1,6 @@
 import time
 import json
+import logging
 
 from flask import Blueprint, redirect
 
@@ -19,8 +20,10 @@ def login(user):
     if user:
         _session = AuthServices.authenticate_user(user)
         time.sleep(0.5)
-        message = json.dumps(construct_response_message(message="successful login",
-                                                        session=_session))
+        message = json.dumps({
+            'message': "successful login",
+            'session': _session
+        })
 
         return message, Status.HTTP_200_OK
     message = construct_response_message(message="Username Password Incorrect")
@@ -61,11 +64,12 @@ def google_auth():
 @auth.route('/oauth2callback')
 def callback():
     user_info, token_id = GoogleUserServices.user_details()
+    logging.info(user_info)
     session_id = AuthServices.google_oauth_authenticate_user(user_info, token_id)
     time.sleep(0.5)
     message = json.dumps(construct_response_message(message="successful login",
                                                     session=session_id))
-    url = frontend_config().get('frontend_url') + '/sign/' + session_id +''
+    url = frontend_config().get('frontend_url') + '/sign/' + session_id + ''
     return redirect(url)
 
 
