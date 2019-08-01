@@ -16,8 +16,10 @@ def load_config(application='web'):
     client_secret = json.load(open('client_secret.json'))
     redirect_uris = client_secret.get(application).get('redirect_uris')
     redirect_uri = redirect_uris
+
     if environment == 'production':
         redirect_uri = redirect_uris[3:6]
+
     config = dict_formation(
         redirect_uris=redirect_uri,
         token_uri=client_secret.get(application).get('token_uri'),
@@ -37,8 +39,10 @@ def frontend_config(environment=environment):
             frontend_url='http://localhost:3000'
         )
         pass
+
     elif environment == 'production':
         config = dict_formation(
             frontend_url='https://full-services.appspot.com'
         )
+
     return config
