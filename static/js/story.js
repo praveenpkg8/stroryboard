@@ -10,8 +10,7 @@ var template = "";
 
 
 
-function getStory()
-{
+function getStory() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET",  URL + "api/story", false ); // false for synchronous request
     xmlHttp.send();
