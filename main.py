@@ -1,7 +1,9 @@
 from init import init_app
 import logging
 from flask import redirect, url_for
+
 app = init_app(__name__)
+
 
 @app.route('/')
 def hello():
@@ -16,4 +18,3 @@ def server_error(e):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
