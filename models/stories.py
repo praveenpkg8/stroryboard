@@ -16,7 +16,7 @@ class Story(ndb.Model):
     @staticmethod
     def create_story(story):
         story_key = story.put()
-        return story_key
+        return story_key.get()
 
     @staticmethod
     def get_all_story(cursor=None):
@@ -61,7 +61,7 @@ class Comment(ndb.Model):
     @staticmethod
     def create_comment(comment):
         comment_key = comment.put()
-        return comment_key
+        return comment_key.get()
 
     @staticmethod
     def get_all_comment(story_id, cursor=None):
@@ -86,7 +86,7 @@ class Like(ndb.Model):
 
     @staticmethod
     def get_like(mail, story_id):
-        like = Like.query(Like.mail == mail and Like.story_id == story_id).get()
+        like = Like.query(Like.mail == mail, Like.story_id == story_id).get()
         return like
 
     @staticmethod
