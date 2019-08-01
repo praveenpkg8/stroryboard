@@ -1,13 +1,17 @@
 import json
-import logging
+
 
 from functools import wraps
 from flask import request
 
-from models.auth_datastore import User, Session
-from services.auth_services import AuthServices
 
+from models.auth_datastore import User, Session
+
+
+from services.auth_services import AuthServices
 from services.parser import Parser
+
+
 from utils.exception import EmailFormatException, AccountAlreadyExist
 from utils.helpers import from_datastore, parse_entity, parse_session, construct_response_message
 
@@ -60,6 +64,7 @@ class UserServices:
         @wraps(fn)
         def decorated_function(*args, **kwargs):
             if 'session' in request.cookies:
+
                 message = request.cookies.get('session')
                 user = Session.get_session(message)
                 if user is not None:
