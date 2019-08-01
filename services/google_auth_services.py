@@ -54,7 +54,7 @@ class GoogleAuthServices(object):
 
     @staticmethod
     def google_oauth():
-        url = GoogleAuthServices.get_access_code(scope='email', prompt='select_account')
+        url = GoogleAuthServices.get_access_code(scope='profile email', prompt='select_account')
         return url
 
     @staticmethod
