@@ -41,6 +41,7 @@ six==1.12.0
 soupsieve==1.9.2
 testing-v1beta3-googledatastore==4.0.0b4
 uritemplate==3.0.0
+urlfetch==1.1.2
 urllib3==1.25.3
 webapp2==2.5.2
 Werkzeug==0.15.4
