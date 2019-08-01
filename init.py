@@ -34,9 +34,12 @@ def init_app(name):
         model.init_app(app)
         from views.auth_api import auth
         from views.stories_api import story, comment, like
+        from views.contact_api import contact
         app.register_blueprint(auth)
         app.register_blueprint(story)
         app.register_blueprint(comment)
         app.register_blueprint(like)
+        app.register_blueprint(contact)
+
 
     return app
