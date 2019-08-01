@@ -7,3 +7,6 @@ env/
 lib/
 build/
 dist/
+cors.json
+client_secret.json
+full_key.json
