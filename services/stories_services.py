@@ -1,8 +1,11 @@
-from flask import request
 import uuid
 
+
+from flask import request
+
+
 from models.stories import Story, Comment, Like
-from utils.helpers import parse_all_story, parse_all_comment
+from utils.helpers import parse_all_story, parse_all_comment, parse_update_story, parse_comment
 
 
 class StoryServices(object):
@@ -11,7 +14,7 @@ class StoryServices(object):
     def save_story():
         story_id = uuid.uuid4().hex
         request_data = request.get_json()
-        # put_url = Story.file_sign(story_id)
+        put_url = Story.file_sign(story_id)
         story = Story(
             story_id=story_id,
             name=request_data.get('name'),
@@ -19,7 +22,7 @@ class StoryServices(object):
             story=request_data.get('story')
         )
         message = Story.create_story(story)
-        return message
+        return parse_update_story(message), put_url
 
     @staticmethod
     def retrieve_all_story(user):
@@ -54,7 +57,8 @@ class CommentServices(object):
             comment=request_data.get('comment')
         )
         message = Comment.create_comment(comment)
-        return message
+
+        return parse_comment(message)
 
     @staticmethod
     def retrieve_all_comment(story_id):
@@ -83,7 +87,7 @@ class LikeService(object):
                 mail=mail
             )
             count = StoryServices.update_like(story_id, True)
-            like_key = Like.create_like(like)
+            Like.create_like(like)
             return True, count
 
 
