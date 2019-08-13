@@ -9,9 +9,14 @@ class User(ndb.Model):
     updated_on = ndb.DateTimeProperty(auto_now_add=True)
 
     @staticmethod
-    def create_user(user):
-        user_key = user.put()
-        return user_key
+    def create_user(name, mail, password):
+        user = User(
+            name=name,
+            mail=mail,
+            password=password,
+        )
+        user.put()
+        return "Account Created Successfully"
 
     @staticmethod
     def get_all_user():
@@ -63,4 +68,5 @@ class Session(ndb.Model):
     @staticmethod
     def delete_session(_session):
         _session.key.delete()
+
 
