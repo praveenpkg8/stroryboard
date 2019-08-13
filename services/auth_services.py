@@ -8,13 +8,12 @@ class AuthServices(object):
 
     @staticmethod
     def new_user(request_data):
-        user = User(
+        message = User.create_user(
             name=request_data.get('name'),
             mail=request_data.get('mail'),
             password=request_data.get('password'),
         )
-        User.create_user(user)
-        return "Account Created Successfully"
+        return message
 
     @staticmethod
     def fetch_user_by_mail(mail):
@@ -28,14 +27,12 @@ class AuthServices(object):
         user = User.user_by_mail(user_info.get('email'))
 
         if user is None:
-            user = User(
+            message = User.create_user(
                 name=user_info.get('name'),
                 mail=user_info.get('email'),
-                password=password
+                password=password,
             )
-            User.create_user(user)
-
-            return "Account Created Successfully"
+            return message
 
     @staticmethod
     def google_oauth_authenticate_user(user, token_id):
