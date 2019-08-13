@@ -1,6 +1,5 @@
 from google.appengine.ext import ndb
 from google.appengine.datastore.datastore_query import Cursor
-from google.cloud import storage
 import datetime
 
 
@@ -37,16 +36,20 @@ class Story(ndb.Model):
 
     @staticmethod
     def file_sign(story_id):
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket("full-services.appspot.com")
 
-        blob = bucket.blob("story/" + story_id + ".jpg")
-        url = blob.generate_signed_url(
-            version='v4',
-            expiration=datetime.timedelta(minutes=30),
-            method='PUT',
-        )
-        return url
+        # from google.cloud import storage
+        #
+        # storage_client = storage.Client()
+        # bucket = storage_client.get_bucket("full-services.appspot.com")
+        #
+        # blob = bucket.blob("story/" + story_id + ".jpg")
+        # url = blob.generate_signed_url(
+        #     version='v4',
+        #     expiration=datetime.timedelta(minutes=30),
+        #     method='PUT',
+        # )
+        # return url
+        return None
 
 
 class Comment(ndb.Model):
