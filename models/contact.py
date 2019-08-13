@@ -26,6 +26,6 @@ class Contact(ndb.Model):
 
     @staticmethod
     def remove_contact(contact):
-        contact.delete()
+        contact.key.delete()
 
 
