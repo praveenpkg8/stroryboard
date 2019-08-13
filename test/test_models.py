@@ -1,10 +1,11 @@
 import unittest
 
+
 from models.auth_datastore import User, Tokens, Session
 from models.contact import Contact
 from models.stories import Story, Comment, Like
-#
-# from google.appengine.api import memcache
+
+
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
@@ -138,6 +139,7 @@ class TestStoryModel(unittest.TestCase):
         self.testbed.activate()
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
+        ndb.get_context().clear_cache()
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -162,7 +164,7 @@ class TestStoryModel(unittest.TestCase):
         self.assertEqual('abc', story.story_id)
 
 
-class DatastoreTestCase(unittest.TestCase):
+class TestCommentModel(unittest.TestCase):
 
     def setUp(self):
         self.testbed = testbed.Testbed()
@@ -178,9 +180,50 @@ class DatastoreTestCase(unittest.TestCase):
         Comment().put()
         self.assertEqual(1, len(Comment.query().fetch()))
 
+    def test_get_all_comment(self):
+        Story(
+            story_id='abc'
+        ).put()
+        Comment(story_id='abc').put()
+        Comment(story_id='abc').put()
+        Comment(story_id='abc').put()
+        Comment(story_id='abc').put()
+        comment_entity = Comment.get_all_comment('abc')
+        self.assertEqual(True, comment_entity[2])
+
+
+class TestLikeModel(unittest.TestCase):
+
+    def setUp(self):
+        self.testbed = testbed.Testbed()
+        self.testbed.activate()
+        self.testbed.init_datastore_v3_stub()
+        self.testbed.init_memcache_stub()
+        ndb.get_context().clear_cache()
+
+    def tearDown(self):
+        self.testbed.deactivate()
+
     def test_like_creation(self):
         Like().put()
         self.assertEqual(1, len(Like.query().fetch()))
+
+    def test_get_like(self):
+        Like(
+            mail='pk@pk.com',
+            story_id='abc'
+        ).put()
+        like = Like.query(Like.mail == 'pk@pk.com', Like.story_id == 'abc').get()
+        self.assertEqual('abc', like.story_id)
+
+    def test_delete_like(self):
+        Like(
+            mail='pk@pk.com',
+            story_id='abc'
+        ).put()
+        like = Like.query(Like.mail == 'pk@pk.com', Like.story_id == 'abc').get()
+        Like.delete_like(like)
+        self.assertEqual(0, len(Like.query().fetch()))
 
 
 if __name__ == '__main__':
