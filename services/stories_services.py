@@ -11,22 +11,20 @@ from utils.helpers import parse_all_story, parse_all_comment, parse_update_story
 class StoryServices(object):
 
     @staticmethod
-    def save_story():
+    def save_story(story_info):
         story_id = uuid.uuid4().hex
-        request_data = request.get_json()
         put_url = Story.file_sign(story_id)
         story = Story(
             story_id=story_id,
-            name=request_data.get('name'),
-            mail=request_data.get('mail'),
-            story=request_data.get('story')
+            name=story_info.get('name'),
+            mail=story_info.get('mail'),
+            story=story_info.get('story').strip()
         )
         message = Story.create_story(story)
         return parse_update_story(message), put_url
 
     @staticmethod
-    def retrieve_all_story(user):
-        request_next_cursor = request.args.get('next_cursor')
+    def retrieve_all_story(user, request_next_cursor=None):
         stories, next_cursor, more = Story.get_all_story(request_next_cursor)
         if stories is not None:
             _stories = parse_all_story(stories, user)
@@ -46,24 +44,22 @@ class StoryServices(object):
 class CommentServices(object):
 
     @staticmethod
-    def save_comment():
+    def save_comment(comment_info):
         comment_id = uuid.uuid4().hex
-        request_data = request.get_json()
         comment = Comment(
             comment_id=comment_id,
-            story_id=request_data.get('story_id'),
-            name=request_data.get('name'),
-            mail=request_data.get('mail'),
-            comment=request_data.get('comment')
+            story_id=comment_info.get('story_id'),
+            name=comment_info.get('name'),
+            mail=comment_info.get('mail'),
+            comment=comment_info.get('comment')
         )
         message = Comment.create_comment(comment)
 
         return parse_comment(message)
 
     @staticmethod
-    def retrieve_all_comment(story_id):
-        cursor = request.args.get('next_cursor')
-        comments, next_cursor, more = Comment.get_all_comment(story_id, cursor)
+    def retrieve_all_comment(story_id, request_next_cursor=None):
+        comments, next_cursor, more = Comment.get_all_comment(story_id, request_next_cursor)
         comment = parse_all_comment(comments)
         return comment, next_cursor, more
 
@@ -71,9 +67,7 @@ class CommentServices(object):
 class LikeService(object):
 
     @staticmethod
-    def update_like():
-        story_id = request.args.get('story_id')
-        mail = request.args.get('mail')
+    def update_like(story_id, mail):
         like_key = Like.get_like(mail, story_id)
         if like_key is not None:
             Like.delete_like(like_key)
@@ -90,10 +84,3 @@ class LikeService(object):
             Like.create_like(like)
             return True, count
 
-
-class FileServices(object):
-
-    @staticmethod
-    def sign_url():
-        comment_file = Comment.file_sign()
-        return comment_file
