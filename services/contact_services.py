@@ -80,7 +80,7 @@ class ContactService(object):
     @staticmethod
     def mail_to_contact(name, email):
 
-        sender_address = 'admin@full_services.appspotmail.com'
+        sender_address = 'admin@full-services.appspotmail.com'
 
         message = mail.EmailMessage(
             sender=sender_address,
