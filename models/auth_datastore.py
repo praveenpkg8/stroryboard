@@ -1,3 +1,5 @@
+import logging
+
 from google.appengine.ext import ndb
 
 
@@ -27,6 +29,12 @@ class User(ndb.Model):
     def user_by_mail(mail):
         user = User.query(User.mail == mail).get()
         return user
+
+    @staticmethod
+    def change_password(mail, password):
+        user = User.query(User.mail == mail).get()
+        user.password = password
+        user.put()
 
 
 class Tokens(ndb.Model):
@@ -68,5 +76,35 @@ class Session(ndb.Model):
     @staticmethod
     def delete_session(_session):
         _session.key.delete()
+
+
+class ResetPassword(ndb.Model):
+    reset_id = ndb.StringProperty()
+    mail = ndb.StringProperty()
+    created_on = ndb.DateTimeProperty(auto_now=True)
+    updated_on = ndb.DateTimeProperty(auto_now_add=True)
+
+    @staticmethod
+    def create_reset(reset_id, mail):
+        ResetPassword(
+            reset_id=reset_id,
+            mail=mail
+        ).put()
+
+    @staticmethod
+    def get_mail(reset_id):
+        entity = ResetPassword.query(ResetPassword.reset_id == reset_id).get()
+        logging.info(entity)
+        if entity:
+            mail = entity.mail
+            logging.info('deleting')
+            entity.key.delete()
+            return mail
+
+
+
+
+
+
 
 
