@@ -1,5 +1,5 @@
 import json
-
+import logging
 
 from flask import Blueprint, request
 
@@ -16,18 +16,22 @@ like = Blueprint('like', __name__, url_prefix='/api/like')
 @story.route('/', methods=['POST'])
 @UserServices.check_user
 def upload_stories(user):
-    response, url = StoryServices.save_story()
-    message = construct_response_message(
-        message=response,
-        url=url
-    )
-    return json.dumps(message)
+    if user:
+        story_info = request.get_json()
+        response, url = StoryServices.save_story(story_info)
+        message = construct_response_message(
+            message=response,
+            url=url
+        )
+        return json.dumps(message)
+
 
 
 @story.route('/', methods=['GET'])
 @UserServices.check_user
 def fetch_all_stories(user):
-    response, next_cursor, more = StoryServices.retrieve_all_story(user)
+    request_next_cursor = request.args.get('next_cursor')
+    response, next_cursor, more = StoryServices.retrieve_all_story(user, request_next_cursor)
     message = construct_response_message(
         message=response,
         next_cursor=next_cursor,
@@ -39,7 +43,8 @@ def fetch_all_stories(user):
 @comment.route('/', methods=['POST'])
 @UserServices.check_user
 def upload_comment(user):
-    comments = CommentServices.save_comment()
+    comment_info = request.get_json()
+    comments = CommentServices.save_comment(comment_info)
     message = construct_response_message(
         message=comments
          )
@@ -50,7 +55,8 @@ def upload_comment(user):
 @UserServices.check_user
 def get_comment(user):
     story_id = request.args.get('story_id')
-    response, next_cursor, more = CommentServices.retrieve_all_comment(story_id)
+    request_next_cursor = request.args.get('next_cursor')
+    response, next_cursor, more = CommentServices.retrieve_all_comment(story_id, request_next_cursor)
     message = construct_response_message(
         comment=response,
         next_cursor=next_cursor,
@@ -62,7 +68,9 @@ def get_comment(user):
 @like.route('/', methods=['GET'])
 @UserServices.check_user
 def update_like(user):
-    status, count = LikeService.update_like()
+    story_id = request.args.get('story_id')
+    mail = request.args.get('mail')
+    status, count = LikeService.update_like(story_id, mail)
     message = construct_response_message(
         status=status,
         count=count
