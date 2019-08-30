@@ -22,7 +22,6 @@ class TestUserModels(unittest.TestCase):
 
     def tearDown(self):
         self.testbed.deactivate()
-        pass
 
     def test_user_creation(self):
         User().put()
