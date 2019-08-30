@@ -32,3 +32,9 @@ class AccountAlreadyExist(Exception):
 
     def __init__(self, value):
         self.error_message = value
+
+
+class PasswordLengthException(Exception):
+
+    def __init__(self, value):
+        self.error_message = value
