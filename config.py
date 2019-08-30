@@ -38,11 +38,10 @@ def frontend_config(environment=environment):
         config = dict_formation(
             frontend_url='http://localhost:3000'
         )
-        pass
+        return config
 
     elif environment == 'production':
         config = dict_formation(
             frontend_url='https://full-services.appspot.com'
         )
-
-    return config
+        return config
