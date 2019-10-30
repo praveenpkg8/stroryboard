@@ -1,11 +1,9 @@
 import os
 import sys
-import logging
 import unittest
 
 
 def fixup_paths(path):
-    import google
 
     try:
         import google
@@ -41,8 +39,8 @@ def main(sdk_path, test_path, test_pattern):
 
 
 if __name__ == '__main__':
-
-    sdk_path = '/Users/user/google-cloud-sdk'
+    sdk_path = os.environ['google_path']
+    sdk_path = sdk_path or '/Users/user/google-cloud-sdk'
     test_path = os.path.dirname(os.path.abspath(__name__)) + '/test'
     test_pattern = 'test_*'
 
