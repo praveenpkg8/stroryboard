@@ -1,7 +1,7 @@
 #Install gcloud to system
 
 curl https://sdk.cloud.google.com | bash
-exec -l $SHELL
+# exec -l $SHELL
 
 gcloud_path=/home/runner/google-cloud-sdk/
 echo $gcloud_path
