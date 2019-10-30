@@ -18,3 +18,9 @@ jobs:
       run: |
         echo Add other actions to build,
         echo test, and deploy your project.
+    - name: Trying to have gcloud sdk
+      run: |
+        curl https://sdk.cloud.google.com | bash
+        exec -l $SHELL
+        gcloud init --disable-prompts
+        
