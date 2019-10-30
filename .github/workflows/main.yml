@@ -15,7 +15,5 @@ jobs:
     - name: Check for script working
       run: echo Hello, world!
     - name: running start up script
-      run: |
-      sh startup.sh
-        
+      run: sh startup.sh
         
