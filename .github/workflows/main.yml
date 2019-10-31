@@ -32,6 +32,8 @@ jobs:
         sudo pip install --upgrade setuptools
     - name: Installing dependcy in library to
       run: pip install -t lib/ -r requirements.txt
+    - name: check dir
+      run: ls
     - name: Running test suite
       run: python runner.py
       
