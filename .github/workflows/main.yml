@@ -14,8 +14,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: Check for script working
       run: echo Hello, world!
-    - name: Installing google sdk
+    - name: Download google sdk
       run: curl https://sdk.cloud.google.com | bash
+    - name: Insall gooogle sdk
+      run: gcloud init
     - name: Fixing path of google sdk in evironment variable
       run: |
         export gcloud_path=/home/runner/google-cloud-sdk/
