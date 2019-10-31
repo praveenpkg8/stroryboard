@@ -7,8 +7,8 @@ export gcloud_path=/home/runner/google-cloud-sdk/
 echo $gcloud_path
 
 #install python and pip 0
-apt-get update -y
-apt-get -y install python2.7 python-pip
+sudo apt-get update -y
+sudo apt-get -y install python2.7 python-pip
 
 
 #installing requirements
