@@ -16,8 +16,8 @@ jobs:
       run: echo Hello, world!
     - name: Download google sdk
       run: curl https://sdk.cloud.google.com | bash
-    - name: Insall gooogle sdk
-      run: gcloud init
+    - name: View gooogle sdk
+      run: ls /home/runner/google-cloud-sdk/
     - name: Fixing path of google sdk in evironment variable
       run: |
         export gcloud_path=/home/runner/google-cloud-sdk/
