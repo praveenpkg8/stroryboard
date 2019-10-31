@@ -3,7 +3,7 @@
 curl https://sdk.cloud.google.com | bash
 # exec -l $SHELL
 
-gcloud_path=/home/runner/google-cloud-sdk/
+export gcloud_path=/home/runner/google-cloud-sdk/
 echo $gcloud_path
 
 #install python and pip
