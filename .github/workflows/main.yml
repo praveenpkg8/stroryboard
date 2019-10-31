@@ -26,6 +26,8 @@ jobs:
         sudo apt-get -y install python2.7 python-pip
     - name: Installing dependcy for project
       run: pip install -r requirements.txt
+    - name: Installing dependcy in library to
+      run: pip install -t lib/ requirements.txt
     - name: Running test suite
       run: python runner.py
       
