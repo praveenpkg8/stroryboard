@@ -22,8 +22,8 @@ jobs:
         echo $gcloud_path
     - name: Installing python and pip
       run: |
-        apt-get update -y
-        apt-get -y install python2.7 python-pip
+        sudo apt-get update -y
+        sudo apt-get -y install python2.7 python-pip
     - name: checking out directory
       run: ls
       
