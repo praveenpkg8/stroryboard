@@ -159,7 +159,6 @@ class TestLikeServices(unittest.TestCase):
             'story': 'king in the north'
         }
         story = StoryServices.save_story(story_info)
-        print(story)
         like_entity = LikeService.update_like(story[0].get('story_id'), story[0].get('mail'))
         self.assertEqual(True, like_entity[0])
 
