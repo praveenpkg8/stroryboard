@@ -3,7 +3,7 @@
 fullEnv/
 __pycache__/
 *.pyc
-env/
+venv/
 lib/
 build/
 dist/

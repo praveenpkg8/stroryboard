@@ -1,11 +1,10 @@
 import os
 import sys
-import logging
 import unittest
 
 
+
 def fixup_paths(path):
-    import google
 
     try:
         import google
@@ -13,10 +12,14 @@ def fixup_paths(path):
     except ImportError:
         print("import error")
 
+    print(path)
+
     sys.path.insert(1, path)
 
 
 def main(sdk_path, test_path, test_pattern):
+
+    print("os path exist: {}".format(os.path.exists(os.path.join(sdk_path, 'platform/google_appengine'))))
 
     if os.path.exists(os.path.join(sdk_path, 'platform/google_appengine')):
         sdk_path = os.path.join(sdk_path, 'platform/google_appengine')
@@ -41,8 +44,8 @@ def main(sdk_path, test_path, test_pattern):
 
 
 if __name__ == '__main__':
-
-    sdk_path = '/Users/user/google-cloud-sdk'
+    sdk_path = os.environ.get('gcloud_pat')
+    sdk_path = sdk_path or '/usr/lib/google-cloud-sdk/'
     test_path = os.path.dirname(os.path.abspath(__name__)) + '/test'
     test_pattern = 'test_*'
 
