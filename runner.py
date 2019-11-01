@@ -44,7 +44,8 @@ def main(sdk_path, test_path, test_pattern):
 
 
 if __name__ == '__main__':
-    sdk_path = '/home/runner/google-cloud-sdk/'
+    sdk_path = os.environ.get('gcloud_pat')
+    sdk_path = sdk_path or '/usr/lib/google-cloud-sdk/'
     test_path = os.path.dirname(os.path.abspath(__name__)) + '/test'
     test_pattern = 'test_*'
 
