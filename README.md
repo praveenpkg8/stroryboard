@@ -1,7 +1,7 @@
 Story Board
 ---
 
-[![Actions Status](https://github.com/praveenpkg8/stroryboard/workflows/main/badge.svg)](https://github.com/praveenpkg8/stroryboard/actions)
+[![Actions Status](https://github.com/praveenpkg8/stroryboard/workflows/CI/badge.svg)](https://github.com/praveenpkg8/stroryboard/actions)
 
  Story board is fun and open source app that is created for the openness of community.
  Many community have been trying improve on a regular basis what story board try to solve
