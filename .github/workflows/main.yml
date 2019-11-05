@@ -24,7 +24,7 @@ jobs:
         APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
       with:
         args: app deploy app.yaml
-    - name: check for sdk
+    - name: check for sdk in google
       run: ls /usr/lib/google-cloud-sdk/
 #     - name: Installing google sdk
 #       run: |
