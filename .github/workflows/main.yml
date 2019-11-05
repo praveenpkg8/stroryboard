@@ -24,6 +24,8 @@ jobs:
       run: |
         export gcloud_path=/usr/lib/google-cloud-sdk/
         echo $gcloud_path
+    - name: Checking gcloud version
+      run: gcloud version
     - name: Installing python and pip
       run: |
         sudo apt-get update -y
