@@ -12,20 +12,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Check for script working
-      run: echo Hello, world!
-    - name: Check for secrets
-      env:
-          PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
-      run: echo $PROJECT_ID
+#     - name: Check for script working
+#       run: echo Hello, world!
+#     - name: Check for secrets
+#       env:
+#           PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
+#       run: echo $PROJECT_ID
     - uses: actions-hub/gcloud@master
       env:
         PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
         APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
       with:
         args: app deploy app.yaml
-    - name: check for sdk in google
-      run: ls /usr/lib/google-cloud-sdk/
+#     - name: check for sdk in google
+#       run: ls /usr/lib/google-cloud-sdk/
 #     - name: Installing google sdk
 #       run: |
 #         echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
