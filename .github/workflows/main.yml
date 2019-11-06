@@ -53,5 +53,7 @@ jobs:
         env:
           PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
           APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+        name: store env variable
+        run: . deploy.sh
         with:
-          args: app deploy app.yaml --version deploy-demo
+          args: app deploy app.yaml --version $version 
