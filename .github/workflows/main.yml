@@ -60,4 +60,4 @@ jobs:
           VERSION: $version
         
         with:
-          args: app deploy app.yaml --version ${{VERSION }}
+          args: app deploy app.yaml --version $VERSION
