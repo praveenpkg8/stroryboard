@@ -57,6 +57,7 @@ jobs:
         env:
           PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
           APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+          VERSION: $version
         
         with:
-          args: app deploy app.yaml --version $version 
+          args: app deploy app.yaml --version VERSION 
