@@ -49,7 +49,7 @@ jobs:
         gcloud auth activate-service-account --key-file=account.json
         gcloud config set project "$PROJECT_ID"    
     - name: Deploy application
-      run: gcloud app deploy app.yaml --quiet
+      run: . deploy.sh
     
       
 
