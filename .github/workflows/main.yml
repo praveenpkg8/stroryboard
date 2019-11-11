@@ -40,17 +40,34 @@ jobs:
       run: ls
     - name: Running test suite
       run: python runner.py
-      
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions-hub/gcloud@master
-        env:
+    - name: Setting Account Config
+      env:
           PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
           APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-        with:
-          args: app deploy app.yaml
+      run: |
+        echo "$APPLICATION_CREDENTIALS" | base64 -d > account.json
+        gcloud auth activate-service-account --key-file=account.json
+        gcloud config set project "$PROJECT_ID"    
+    - name: Deploy application
+      run: . deploy.sh
+    
+      
+
+#   deploy:
+#     name: Deploy
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: store env variable
+#         run: |
+#           . deploy.sh
+#           echo $version
+#       - uses: actions-hub/gcloud@master
+#         env:
+#           PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
+#           APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+#           VERSION: $version
+        
+#         with:
+#           args: app deploy app.yaml --version $VERSION
