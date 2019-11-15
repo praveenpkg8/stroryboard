@@ -19,8 +19,8 @@ jobs:
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
      - name: Check gcloud version
-      uses: actions/gcloud/cli@master
-      with:
+       uses: actions/gcloud/cli@master
+       with:
         args: version
     # - name: Installing google sdk
     #   run: |
