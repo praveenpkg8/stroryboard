@@ -21,7 +21,7 @@ jobs:
     - name: Check gcloud version
       uses: actions/gcloud/cli@master
       with:
-      args: version
+        args: version
     # - name: Installing google sdk
     #   run: |
     #     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
