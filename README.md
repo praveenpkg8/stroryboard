@@ -7,7 +7,7 @@ Story Board
  Many community have been trying improve on a regular basis what story board try to solve
  is to be open and share what others do in a community
  
- ### Story Board Application Structure
+ ### Story Board Application Structure.
  ```
 |---models/
 ||---auth_datastore.py
